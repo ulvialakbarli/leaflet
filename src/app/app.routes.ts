@@ -3,7 +3,18 @@ import { MapComponent } from './components/map/map.component';
 
 export const routes: Routes = [
     {
+        path:"map",
+        component:MapComponent,
+        pathMatch:"full"
+    },
+    {
         path:"",
-        component:MapComponent
+        redirectTo:"map",
+        pathMatch:"full"
+    },
+    {
+        path:"**",
+        redirectTo:"map",
+        pathMatch:"full"
     }
 ];
