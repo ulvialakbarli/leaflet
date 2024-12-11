@@ -18,24 +18,27 @@ const iconDefault = L.icon({
 L.Marker.prototype.options.icon = iconDefault;
 
 @Component({
-  selector: 'app-map',
+  selector: 'app-locate',
   standalone: true,
-  templateUrl: './map.component.html',
-  styleUrl: './map.component.scss'
+  imports: [],
+  templateUrl: './locate.component.html',
+  styleUrl: './locate.component.scss'
 })
-export class MapComponent implements OnInit,AfterViewInit,OnDestroy{
+export class LocateComponent implements OnInit,AfterViewInit,OnDestroy{
   private map?:L.Map;
+  interval:any;
   constructor(private mapService:MapService){
 
   }
   ngOnDestroy(): void {
+    clearInterval(this.interval);
   }
   ngAfterViewInit(): void {
     this.initMap();
+    this.watch()
     
   }
   ngOnInit(): void {
-    this.getLocation();
   }
   initMap(){
     this.map = L.map('map', {
@@ -51,21 +54,19 @@ export class MapComponent implements OnInit,AfterViewInit,OnDestroy{
     tiles.addTo(this.map);
   }
 
-  //////////////////////////////////
-
   location?:GeolocationPosition;
-  
-  
- 
- 
   getLocation(){
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition(pos=>{
        this.location=pos;
-       this.mapService.addMarker(this.location?.coords.latitude,this.location?.coords.longitude,this.map!);
+       this.mapService.addCircleMarker(this.location?.coords.latitude,this.location?.coords.longitude,this.map!);
       })
      }
   }
-  
-  
+
+  watch(){
+    this.interval=setInterval(() => {
+      this.getLocation();
+    }, 1000);
+  }
 }

@@ -2,6 +2,7 @@ import { JsonPipe } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import * as L from "leaflet";
 import { MapService } from '../../services/map.service';
+import { PopupService } from '../../services/popup.service';
 const iconRetinaUrl = 'public/marker-icon-2x.png';
 const iconUrl = 'public/marker-icon.png';
 const shadowUrl = 'public/marker-shadow.png';
@@ -18,24 +19,25 @@ const iconDefault = L.icon({
 L.Marker.prototype.options.icon = iconDefault;
 
 @Component({
-  selector: 'app-map',
+  selector: 'app-popup',
   standalone: true,
-  templateUrl: './map.component.html',
-  styleUrl: './map.component.scss'
+  imports: [],
+  templateUrl: './popup.component.html',
+  styleUrl: './popup.component.scss'
 })
-export class MapComponent implements OnInit,AfterViewInit,OnDestroy{
+export class PopupComponent implements OnInit,AfterViewInit,OnDestroy{
   private map?:L.Map;
-  constructor(private mapService:MapService){
+  constructor(private mapService:MapService,private popupService:PopupService){
 
   }
   ngOnDestroy(): void {
   }
   ngAfterViewInit(): void {
     this.initMap();
+    this.getLocation()
     
   }
   ngOnInit(): void {
-    this.getLocation();
   }
   initMap(){
     this.map = L.map('map', {
@@ -50,22 +52,14 @@ export class MapComponent implements OnInit,AfterViewInit,OnDestroy{
 
     tiles.addTo(this.map);
   }
-
-  //////////////////////////////////
-
   location?:GeolocationPosition;
-  
-  
- 
- 
   getLocation(){
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition(pos=>{
        this.location=pos;
-       this.mapService.addMarker(this.location?.coords.latitude,this.location?.coords.longitude,this.map!);
+       let content=this.popupService.makePopup({lat:this.location?.coords.latitude,lang:this.location?.coords.longitude});
+       this.mapService.addCircleMarkerWithPopup(this.location?.coords.latitude,this.location?.coords.longitude,this.map!,content);
       })
      }
   }
-  
-  
 }

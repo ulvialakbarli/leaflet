@@ -18,24 +18,26 @@ const iconDefault = L.icon({
 L.Marker.prototype.options.icon = iconDefault;
 
 @Component({
-  selector: 'app-map',
+  selector: 'app-watch',
   standalone: true,
-  templateUrl: './map.component.html',
-  styleUrl: './map.component.scss'
+  imports: [JsonPipe],
+  templateUrl: './watch.component.html',
+  styleUrl: './watch.component.scss'
 })
-export class MapComponent implements OnInit,AfterViewInit,OnDestroy{
+export class WatchComponent  implements OnInit,AfterViewInit,OnDestroy{
   private map?:L.Map;
   constructor(private mapService:MapService){
 
   }
   ngOnDestroy(): void {
+    this.unWatch()
   }
   ngAfterViewInit(): void {
     this.initMap();
+    this.watchLocation()
     
   }
   ngOnInit(): void {
-    this.getLocation();
   }
   initMap(){
     this.map = L.map('map', {
@@ -51,21 +53,30 @@ export class MapComponent implements OnInit,AfterViewInit,OnDestroy{
     tiles.addTo(this.map);
   }
 
-  //////////////////////////////////
+  watchId?:number;
 
-  location?:GeolocationPosition;
-  
-  
- 
- 
-  getLocation(){
+  locations?:Array<any>=[];
+
+  watchLocation(){
     if(navigator.geolocation){
-      navigator.geolocation.getCurrentPosition(pos=>{
-       this.location=pos;
-       this.mapService.addMarker(this.location?.coords.latitude,this.location?.coords.longitude,this.map!);
-      })
-     }
+      this.watchId= navigator.geolocation.watchPosition(pos=>{
+        this.locations?.push(pos);
+        this.mapService.addMarker(pos.coords.latitude,pos.coords.longitude,this.map!)
+        console.log(pos)
+      },
+    err=>{
+      console.log(err)
+    },
+  {
+    enableHighAccuracy:false,
+    timeout:10000,
+    maximumAge:0
+  })
+    }
   }
-  
-  
+  unWatch(){
+    if(this.watchId){
+      navigator.geolocation.clearWatch(this.watchId);
+    }
+  }
 }
