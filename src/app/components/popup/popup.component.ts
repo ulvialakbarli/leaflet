@@ -35,6 +35,7 @@ export class PopupComponent implements OnInit,AfterViewInit,OnDestroy{
   ngAfterViewInit(): void {
     this.initMap();
     this.getLocation()
+    console.log(3)
     
   }
   ngOnInit(): void {
