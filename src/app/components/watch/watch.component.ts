@@ -2,6 +2,7 @@ import { JsonPipe } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import * as L from "leaflet";
 import { MapService } from '../../services/map.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 const iconRetinaUrl = 'public/marker-icon-2x.png';
 const iconUrl = 'public/marker-icon.png';
 const shadowUrl = 'public/marker-shadow.png';
@@ -20,12 +21,13 @@ L.Marker.prototype.options.icon = iconDefault;
 @Component({
   selector: 'app-watch',
   standalone: true,
-  imports: [JsonPipe],
+  imports: [JsonPipe,FormsModule,ReactiveFormsModule],
   templateUrl: './watch.component.html',
   styleUrl: './watch.component.scss'
 })
 export class WatchComponent  implements OnInit,AfterViewInit,OnDestroy{
   private map?:L.Map;
+  center:boolean=true;
   constructor(private mapService:MapService){
 
   }
@@ -61,7 +63,11 @@ export class WatchComponent  implements OnInit,AfterViewInit,OnDestroy{
     if(navigator.geolocation){
       this.watchId= navigator.geolocation.watchPosition(pos=>{
         this.locations?.push(pos);
-        this.mapService.addMarker(pos.coords.latitude,pos.coords.longitude,this.map!)
+        this.mapService.addMarker(pos.coords.latitude,pos.coords.longitude,this.map!);
+        if(this.center){
+          this.map?.panTo([pos.coords.latitude, pos.coords.longitude]);
+        }
+        
         console.log(pos)
       },
     err=>{

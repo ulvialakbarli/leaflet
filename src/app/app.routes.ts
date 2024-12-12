@@ -3,6 +3,8 @@ import { MapComponent } from './components/map/map.component';
 import { WatchComponent } from './components/watch/watch.component';
 import { LocateComponent } from './components/locate/locate.component';
 import { PopupComponent } from './components/popup/popup.component';
+import { ShapeComponent } from './components/shape/shape.component';
+import { RegionsComponent } from './components/regions/regions.component';
 
 export const routes: Routes = [
     {
@@ -21,6 +23,14 @@ export const routes: Routes = [
     {
         path:"popup",
         component:PopupComponent
+    },
+    {
+        path:"shape",
+        component:ShapeComponent
+    },
+    {
+        path:"regions",
+        component:RegionsComponent
     },
 
 
