@@ -3,6 +3,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import * as L from "leaflet";
 import { MapService } from '../../services/map.service';
 import { ApiService } from '../../services/api.service';
+import { environment } from '../../../enviroments/enviroment';
 const iconRetinaUrl = 'public/marker-icon-2x.png';
 const iconUrl = 'public/marker-icon.png';
 const shadowUrl = 'public/marker-shadow.png';
@@ -73,7 +74,7 @@ export class ShapeComponent  implements OnInit,AfterViewInit,OnDestroy{
   }
 
   getCountryData(){
-    this.api.get("/jsons/azerbaycanUmumi.json").subscribe({
+    this.api.get(`${environment.assetsUrl}azerbaycanUmumi.json`).subscribe({
       next:json=>{
         this.countryData=json;
         this.initStatesLayer()
