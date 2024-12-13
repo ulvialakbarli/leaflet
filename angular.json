@@ -32,6 +32,10 @@
               },
               {
                 "glob": "**/*",
+                "input": "jsons"
+              },
+              {
+                "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images/",
                 "output": "./public"
               }

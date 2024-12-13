@@ -74,7 +74,7 @@ export class WatchComponent  implements OnInit,AfterViewInit,OnDestroy{
       console.log(err)
     },
   {
-    enableHighAccuracy:false,
+    enableHighAccuracy:true,
     timeout:10000,
     maximumAge:0
   })
