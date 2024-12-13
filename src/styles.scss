@@ -2,3 +2,13 @@
 .active-link{
     font-weight: bold;
   }
+
+  @keyframes color-change{
+    from {filter: brightness(0%);}
+    to {filter: brightness(300%);}
+  }
+  .person-icon{
+    animation-name: color-change;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+  }

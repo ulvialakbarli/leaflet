@@ -113,8 +113,11 @@ export class RegionsComponent  implements OnInit,AfterViewInit,OnDestroy{
         layer.on({
           mouseover: (e) => (this.highlightFeature(e)),
           mouseout: (e) => (this.resetFeature(e)),
-          mouseup:(e)=>{console.log(e)}
+          mouseup:(e)=>{
+            layer.bindPopup(`<div>${feature?.properties?.name}</div>`,{closeOnClick:true,autoClose:true})
+          }
         })
+        
       )
     });
     
